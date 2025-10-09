@@ -1,0 +1,91 @@
+# =========================
+# OS / Editor cruft
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.orig
+*.tmp
+*.bak
+
+# Rider / VS / VS Code (keep .vscode so tasks/settings can be committed)
+.idea/
+.vs/
+*.user
+*.suo
+
+# =========================
+# .NET build output
+# =========================
+bin/
+obj/
+TestResults/
+*.VisualState.xml
+*.coverage
+*.coveragexml
+
+# =========================
+# NuGet
+# =========================
+# Global cache is outside repo, but ignore any local packs here
+**/*.nupkg
+**/*.snupkg
+# Lock files can be committed if you want deterministic restores; ignore if not
+# packages.lock.json
+
+# =========================
+# Docker / Build artifacts
+# =========================
+/out/                      # docker --output target
+/artifacts/                # per-stage artifacts (if you export them locally)
+*.tar
+*.tar.gz
+*.tar.xz
+*.tgz
+
+# =========================
+# Zig (if you build locally outside Docker)
+# =========================
+zig-out/
+zig-cache/
+
+# =========================
+# libpg_query source/extract (if ever run locally)
+# =========================
+/src/libpg_query-*/
+tmp/
+postgresql-*/
+
+# =========================
+# Generated code / Native runtimes in repo tree
+# (kept out of source control; recreated by Docker build)
+# =========================
+src/PgQuery.Protobuf/Generated/
+src/PgQuery.Protobuf/runtimes/
+
+# If you prefer committing generated C# protobufs, comment the line above.
+
+# =========================
+# Local macOS SDK exports (do NOT commit Apple SDK files)
+# =========================
+/local/
+local/MacOSX*.sdk.tar.xz
+local/MacOSX*.sdk.tar.xz.sha256
+local/MacOSX*.sdk/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+test/valgrind.log
+
+# =========================
+# Temporary / scratch
+# =========================
+*.tmp
+*.temp
+~$*
+.scratch/
+.cache/

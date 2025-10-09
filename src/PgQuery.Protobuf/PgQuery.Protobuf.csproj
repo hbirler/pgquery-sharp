@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>PgQuery.Protobuf</PackageId>
+    <Authors>Your Name</Authors>
+    <Description>Lightweight .NET wrapper over libpg_query using Protobuf AST (no C shim). Includes prebuilt native libraries for Linux/Windows and optionally macOS.</Description>
+    <IncludeSymbols>false</IncludeSymbols>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Platforms>AnyCPU</Platforms>
+
+    <!-- prevent SDK from auto-including **/*.cs so we can control Compile globs -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.25.3" />
+  </ItemGroup>
+
+  <!-- Pack native libs at runtimes/*/native -->
+  <ItemGroup>
+    <Content Include="runtimes/**" Pack="true" PackagePath="runtimes/" />
+  </ItemGroup>
+
+  <!-- Explicitly include only what we want -->
+  <ItemGroup>
+    <Compile Include="Generated/**/*.cs" />
+    <Compile Include="Interop/**/*.cs" />
+  </ItemGroup>
+</Project>
