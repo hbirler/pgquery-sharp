@@ -61,8 +61,8 @@ postgresql-*/
 # Generated code / Native runtimes in repo tree
 # (kept out of source control; recreated by Docker build)
 # =========================
-src/PgQuery.Protobuf/Generated/
-src/PgQuery.Protobuf/runtimes/
+src/PgQuery/Generated/
+src/PgQuery/runtimes/
 
 # If you prefer committing generated C# protobufs, comment the line above.
 

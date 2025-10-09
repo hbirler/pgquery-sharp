@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageId>PgQuery.Protobuf</PackageId>
+    <PackageId>PgQuery</PackageId>
     <Authors>Your Name</Authors>
     <Description>Lightweight .NET wrapper over libpg_query using Protobuf AST (no C shim). Includes prebuilt native libraries for Linux/Windows and optionally macOS.</Description>
     <IncludeSymbols>false</IncludeSymbols>

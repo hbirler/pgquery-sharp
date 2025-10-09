@@ -70,23 +70,23 @@ RUN chmod +x ./scripts/build_target.sh \
 # ---------- pack ----------
 FROM toolchain AS pack
 # project sources last, so native builds cache even if C# changes
-COPY src/PgQuery.Protobuf /work/src/PgQuery.Protobuf
+COPY src/PgQuery /work/src/PgQuery
 COPY LICENSES /work/LICENSES
 # generated files
-COPY --from=gen /generated /work/src/PgQuery.Protobuf/Generated
+COPY --from=gen /generated /work/src/PgQuery/Generated
 # native artifacts aggregated
-COPY --from=build-linux-x64  /artifacts /work/src/PgQuery.Protobuf/runtimes
-COPY --from=build-linux-arm64 /artifacts /work/src/PgQuery.Protobuf/runtimes
-COPY --from=build-win-x64    /artifacts /work/src/PgQuery.Protobuf/runtimes
-COPY --from=build-win-arm64  /artifacts /work/src/PgQuery.Protobuf/runtimes
-COPY --from=build-osx-arm64  /artifacts /work/src/PgQuery.Protobuf/runtimes
+COPY --from=build-linux-x64  /artifacts /work/src/PgQuery/runtimes
+COPY --from=build-linux-arm64 /artifacts /work/src/PgQuery/runtimes
+COPY --from=build-win-x64    /artifacts /work/src/PgQuery/runtimes
+COPY --from=build-win-arm64  /artifacts /work/src/PgQuery/runtimes
+COPY --from=build-osx-arm64  /artifacts /work/src/PgQuery/runtimes
 # license files from source stage
 COPY --from=src /licenses /work/LICENSES
 
 # only this script is copied here; changes only affect pack
 COPY build/scripts/pack_nuget.sh ./scripts/pack_nuget.sh
 RUN chmod +x ./scripts/pack_nuget.sh \
- && ./scripts/pack_nuget.sh /work/src/PgQuery.Protobuf /work/out
+ && ./scripts/pack_nuget.sh /work/src/PgQuery /work/out
 
 # ---------- out ----------
 FROM scratch AS out
