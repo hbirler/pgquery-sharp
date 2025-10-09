@@ -58,26 +58,14 @@ COPY build/scripts/build_target.sh ./scripts/build_target.sh
 RUN chmod +x ./scripts/build_target.sh \
  && ./scripts/build_target.sh aarch64-windows-gnu win-arm64 pg_query.dll /artifacts
 
-## ---------- macos-sdk (optional) ----------
-## macOS SDK from local tarball (no network)
-#FROM toolchain AS macos-sdk
-## COPY only this file so changes elsewhere don't bust this stage cache
-#COPY local/MacOSX*.sdk.tar.xz /tmp/MacOSX.sdk.tar.xz
-#RUN mkdir -p /opt/MacOSX.sdk \
-# && tar -xJf /tmp/MacOSX.sdk.tar.xz -C /opt/MacOSX.sdk --strip-components=1
-#
-## ---------- build-osx-arm64 (optional) ----------
-#FROM toolchain AS build-osx-arm64
-#COPY --from=src /src /src
+# ---------- build-osx-arm64 (optional) ----------
+FROM toolchain AS build-osx-arm64
+COPY --from=src /src /src
 #COPY --from=macos-sdk /opt/MacOSX.sdk /opt/MacOSX.sdk
 #ENV SDKROOT=/opt/MacOSX.sdk
-#COPY build/scripts/build_target.sh ./scripts/build_target.sh
-#RUN if [ -d "$SDKROOT" ]; then \
-#      chmod +x ./scripts/build_target.sh && \
-#      ./scripts/build_target.sh aarch64-macos osx-arm64 libpg_query.dylib /artifacts "$SDKROOT"; \
-#    else \
-#      echo "Skipping osx-arm64 (no SDK)"; \
-#    fi
+COPY build/scripts/build_target.sh ./scripts/build_target.sh
+RUN chmod +x ./scripts/build_target.sh \
+ && ./scripts/build_target.sh aarch64-macos osx-arm64 libpg_query.dylib /artifacts;
 
 # ---------- pack ----------
 FROM toolchain AS pack
@@ -91,7 +79,7 @@ COPY --from=build-linux-x64  /artifacts /work/src/PgQuery.Protobuf/runtimes
 COPY --from=build-linux-arm64 /artifacts /work/src/PgQuery.Protobuf/runtimes
 COPY --from=build-win-x64    /artifacts /work/src/PgQuery.Protobuf/runtimes
 COPY --from=build-win-arm64  /artifacts /work/src/PgQuery.Protobuf/runtimes
-#COPY --from=build-osx-arm64  /artifacts /work/src/PgQuery.Protobuf/runtimes
+COPY --from=build-osx-arm64  /artifacts /work/src/PgQuery.Protobuf/runtimes
 # license files from source stage
 COPY --from=src /licenses /work/LICENSES
 
