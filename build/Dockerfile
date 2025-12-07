@@ -83,7 +83,7 @@ FROM toolchain AS build-linux-arm64
 COPY --from=src /src /src
 COPY build/scripts/build_target.sh ./scripts/build_target.sh
 RUN chmod +x ./scripts/build_target.sh \
- && ./scripts/build_target.sh aarch64-linux linux-arm64 libpg_query.so /artifacts
+ && ./scripts/build_target.sh aarch64-linux-gnu linux-arm64 libpg_query.so /artifacts
 
 # ---------- build-win-x64 ----------
 FROM toolchain AS build-win-x64
