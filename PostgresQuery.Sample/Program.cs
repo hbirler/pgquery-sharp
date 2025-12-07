@@ -1,4 +1,4 @@
-﻿using PgQuery;           // generated protobuf namespace
+﻿using PostgresQuery;
 
 var sql = "SELECT 1 AS x";
 // Preferred API: ReadOnlySpan<byte>dot

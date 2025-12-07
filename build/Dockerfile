@@ -42,14 +42,14 @@ FROM toolchain AS build-linux-arm64
 COPY --from=src /src /src
 COPY build/scripts/build_target.sh ./scripts/build_target.sh
 RUN chmod +x ./scripts/build_target.sh \
- && ./scripts/build_target.sh aarch64-linux-gnu linux-arm64 libpg_query.so /artifacts
+ && ./scripts/build_target.sh aarch64-linux linux-arm64 libpg_query.so /artifacts
 
 # ---------- build-win-x64 (GNU) ----------
 FROM toolchain AS build-win-x64
 COPY --from=src /src /src
 COPY build/scripts/build_target.sh ./scripts/build_target.sh
 RUN chmod +x ./scripts/build_target.sh \
- && ./scripts/build_target.sh x86_64-windows-gnu win-x64 pg_query.dll /artifacts
+ && ./scripts/build_target.sh x86_64-windows win-x64 pg_query.dll /artifacts
 
 # ---------- build-win-arm64 (GNU) ----------
 FROM toolchain AS build-win-arm64
@@ -70,24 +70,24 @@ RUN chmod +x ./scripts/build_target.sh \
 # ---------- pack ----------
 FROM toolchain AS pack
 # project sources last, so native builds cache even if C# changes
-COPY src/PgQuery /work/src/PgQuery
+COPY src/PostgresQuery /work/src/PostgresQuery
 COPY LICENSES /work/LICENSES
 # generated files
-COPY --from=gen /generated /work/src/PgQuery/Generated
+COPY --from=gen /generated /work/src/PostgresQuery/Generated
 # native artifacts aggregated
-COPY --from=build-linux-x64  /artifacts /work/src/PgQuery/runtimes
-COPY --from=build-linux-arm64 /artifacts /work/src/PgQuery/runtimes
-COPY --from=build-win-x64    /artifacts /work/src/PgQuery/runtimes
-COPY --from=build-win-arm64  /artifacts /work/src/PgQuery/runtimes
-COPY --from=build-osx-arm64  /artifacts /work/src/PgQuery/runtimes
+COPY --from=build-linux-x64  /artifacts /work/src/PostgresQuery/runtimes
+COPY --from=build-linux-arm64 /artifacts /work/src/PostgresQuery/runtimes
+COPY --from=build-win-x64    /artifacts /work/src/PostgresQuery/runtimes
+COPY --from=build-win-arm64  /artifacts /work/src/PostgresQuery/runtimes
+COPY --from=build-osx-arm64  /artifacts /work/src/PostgresQuery/runtimes
 # license files from source stage
 COPY --from=src /licenses /work/LICENSES
 
 # only this script is copied here; changes only affect pack
 COPY build/scripts/pack_nuget.sh ./scripts/pack_nuget.sh
 RUN chmod +x ./scripts/pack_nuget.sh \
- && ./scripts/pack_nuget.sh /work/src/PgQuery /work/out
-RUN cp /work/src/PgQuery/Generated/PgQuery.g.cs /work/out/PgQuery.g.cs
+ && ./scripts/pack_nuget.sh /work/src/PostgresQuery /work/out
+RUN cp /work/src/PostgresQuery/Generated/PgQuery.g.cs /work/out/PgQuery.g.cs
 
 # ---------- out ----------
 FROM scratch AS out

@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageId>PgQuery</PackageId>
+    <PackageId>PostgresQuery</PackageId>
     <Authors>Your Name</Authors>
     <Description>Lightweight .NET wrapper over libpg_query using Protobuf AST (no C shim). Includes prebuilt native libraries for Linux/Windows and optionally macOS.</Description>
     <IncludeSymbols>false</IncludeSymbols>
@@ -16,6 +16,8 @@
 
     <!-- prevent SDK from auto-including **/*.cs so we can control Compile globs -->
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <LangVersion>default</LangVersion>
+    <RootNamespace>PostgresQuery</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,5 +33,8 @@
   <ItemGroup>
     <Compile Include="Generated/**/*.cs" />
     <Compile Include="Interop/**/*.cs" />
+    <Compile Include="NativeMethod.cs" />
+    <Compile Include="PostgresQuery.cs" />
+    <Compile Include="PostgresException.cs" />
   </ItemGroup>
 </Project>
