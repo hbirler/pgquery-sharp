@@ -5,16 +5,56 @@ ARG PACKAGE_VERSION=0.1.0
 FROM mcr.microsoft.com/dotnet/sdk:8.0-noble AS toolchain
 ARG DEBIAN_FRONTEND=noninteractive
 ARG ZIG_VERSION=0.15.1
+# The sha256sum for the tar.xz file (not the minisig) as a final line of defense
+ARG ZIG_SHA256SUM=c61c5da6edeea14ca51ecd5e4520c6f4189ef5250383db33d01848293bfafe05
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential ca-certificates curl pkg-config make file \
-    protobuf-compiler unzip xz-utils git \
+    protobuf-compiler unzip xz-utils git minisign \
   && rm -rf /var/lib/apt/lists/*
 
-# Correct Zig URL (x86_64-linux)
-RUN curl -sSLf https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz \
-  | tar -xJ --strip-components=1 -C /usr/local \
-  && ln -s /usr/local/zig /usr/local/bin/zig
+RUN set -eux; \
+    ZIG_PUBKEY='RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti+JO/wCYvhbAb/U'; \
+    MIRRORS_URL='https://ziglang.org/download/community-mirrors.txt'; \
+    # Fetch mirror list (newline-separated)
+    curl -fsSL "${MIRRORS_URL}" > /tmp/zig_mirrors.txt; \
+    # Shuffle to avoid hammering the same mirror
+    shuf /tmp/zig_mirrors.txt > /tmp/zig_mirrors_shuffled.txt; \
+    # Add ziglang.org as final fallback
+    printf '%s\n' 'https://ziglang.org/download' >> /tmp/zig_mirrors_shuffled.txt; \
+    \
+    SUCCESS=0; \
+    for MIRROR in $(cat /tmp/zig_mirrors_shuffled.txt); do \
+        MIRROR="${MIRROR%/}"; \
+        BASE_URL="${MIRROR}/${ZIG_VERSION}"; \
+        TARBALL_URL="${BASE_URL}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz"; \
+        SIG_URL="${TARBALL_URL}.minisig"; \
+        echo "Trying ${TARBALL_URL}"; \
+        rm -f /tmp/zig.tar.xz /tmp/zig.tar.xz.minisig || true; \
+        if curl -fsSL -o /tmp/zig.tar.xz "${TARBALL_URL}" \
+        && curl -fsSL -o /tmp/zig.tar.xz.minisig "${SIG_URL}"; then \
+            echo "Downloaded from ${MIRROR}, verifying minisign signature..."; \
+            if minisign -Vm /tmp/zig.tar.xz \
+                    -P "${ZIG_PUBKEY}" \
+                    -x /tmp/zig.tar.xz.minisig; then \
+                echo "Signature OK from ${MIRROR}"; \
+                SUCCESS=1; \
+                break; \
+            else \
+                echo "Signature verification FAILED for ${MIRROR}, trying next..." >&2; \
+            fi; \
+        else \
+            echo "Download failed from ${MIRROR}, trying next..." >&2; \
+        fi; \
+    done; \
+    test "${SUCCESS}" -eq 1; \
+    \
+    # Optional: additional SHA check if you want belt-and-suspenders
+    echo "${ZIG_SHA256SUM}  /tmp/zig.tar.xz" | sha256sum -c -; \
+    \
+    tar -xJf /tmp/zig.tar.xz --strip-components=1 -C /usr/local; \
+    ln -s /usr/local/zig /usr/local/bin/zig; \
+    rm -f /tmp/zig.tar.xz /tmp/zig.tar.xz.minisig /tmp/zig_mirrors*.txt
 
 WORKDIR /work
 
