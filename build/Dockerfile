@@ -87,6 +87,7 @@ COPY --from=src /licenses /work/LICENSES
 COPY build/scripts/pack_nuget.sh ./scripts/pack_nuget.sh
 RUN chmod +x ./scripts/pack_nuget.sh \
  && ./scripts/pack_nuget.sh /work/src/PgQuery /work/out
+RUN cp /work/src/PgQuery/Generated/PgQuery.g.cs /work/out/PgQuery.g.cs
 
 # ---------- out ----------
 FROM scratch AS out

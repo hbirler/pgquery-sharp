@@ -37,7 +37,7 @@ TestResults/
 # =========================
 # Docker / Build artifacts
 # =========================
-/out/                      # docker --output target
+/out
 /artifacts/                # per-stage artifacts (if you export them locally)
 *.tar
 *.tar.gz
