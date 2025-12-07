@@ -85,21 +85,21 @@ COPY build/scripts/build_target.sh ./scripts/build_target.sh
 RUN chmod +x ./scripts/build_target.sh \
  && ./scripts/build_target.sh aarch64-linux linux-arm64 libpg_query.so /artifacts
 
-# ---------- build-win-x64 (GNU) ----------
+# ---------- build-win-x64 ----------
 FROM toolchain AS build-win-x64
 COPY --from=src /src /src
 COPY build/scripts/build_target.sh ./scripts/build_target.sh
 RUN chmod +x ./scripts/build_target.sh \
  && ./scripts/build_target.sh x86_64-windows win-x64 pg_query.dll /artifacts
 
-# ---------- build-win-arm64 (GNU) ----------
+# ---------- build-win-arm64 ----------
 FROM toolchain AS build-win-arm64
 COPY --from=src /src /src
 COPY build/scripts/build_target.sh ./scripts/build_target.sh
 RUN chmod +x ./scripts/build_target.sh \
- && ./scripts/build_target.sh aarch64-windows-gnu win-arm64 pg_query.dll /artifacts
+ && ./scripts/build_target.sh aarch64-windows win-arm64 pg_query.dll /artifacts
 
-# ---------- build-osx-arm64 (optional) ----------
+# ---------- build-osx-arm64 ----------
 FROM toolchain AS build-osx-arm64
 COPY --from=src /src /src
 #COPY --from=macos-sdk /opt/MacOSX.sdk /opt/MacOSX.sdk

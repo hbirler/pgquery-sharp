@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PACKAGE_VERSION=${PACKAGE_VERSION:-0.1.0}
+PACKAGE_VERSION=${PACKAGE_VERSION:-0.1.1}
 
 echo "Building PostgresQuery package (PACKAGE_VERSION=${PACKAGE_VERSION})..."
 DOCKER_BUILDKIT=1 docker build -f build/Dockerfile \
