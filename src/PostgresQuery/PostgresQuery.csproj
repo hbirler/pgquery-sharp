@@ -6,13 +6,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>PostgresQuery</PackageId>
-    <Authors>Your Name</Authors>
-    <Description>Lightweight .NET wrapper over libpg_query using Protobuf AST (no C shim). Includes prebuilt native libraries for Linux/Windows and optionally macOS.</Description>
+    <Authors>Altan Birler</Authors>
+    <Description>Lightweight .NET wrapper over libpg_query</Description>
     <IncludeSymbols>false</IncludeSymbols>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <Platforms>AnyCPU</Platforms>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <!-- prevent SDK from auto-including **/*.cs so we can control Compile globs -->
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -27,6 +28,12 @@
   <!-- Pack native libs at runtimes/*/native -->
   <ItemGroup>
     <Content Include="runtimes/**" Pack="true" PackagePath="runtimes/" />
+  </ItemGroup>
+
+  <!-- Package docs / license -->
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="LICENSE" />
   </ItemGroup>
 
   <!-- Explicitly include only what we want -->

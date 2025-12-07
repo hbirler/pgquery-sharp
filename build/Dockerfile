@@ -72,9 +72,11 @@ RUN chmod +x ./scripts/build_target.sh \
 FROM toolchain AS pack
 ARG PACKAGE_VERSION
 ENV PACKAGE_VERSION=${PACKAGE_VERSION}
+# docs + license for packaging metadata
+COPY README.md /work/README.md
+COPY LICENSE /work/LICENSE
 # project sources last, so native builds cache even if C# changes
 COPY src/PostgresQuery /work/src/PostgresQuery
-COPY LICENSES /work/LICENSES
 # generated files
 COPY --from=gen /generated /work/src/PostgresQuery/Generated
 # native artifacts aggregated
