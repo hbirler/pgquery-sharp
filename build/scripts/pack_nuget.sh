@@ -11,5 +11,5 @@ find "$PROJ/runtimes" -maxdepth 3 -type f -printf '%P\n' | sort || true
 
 dotnet pack "$PROJ" -c Release -o "$OUT" \
   -p:PackageVersion="$PACKAGE_VERSION" \
-  -p:RepositoryUrl="https://github.com/pganalyze/libpg_query" \
+  -p:RepositoryUrl="https://github.com/hbirler/pgquery-sharp" \
   -p:InformationalVersion="libpg_query:${LIBPG_TAG:-unknown}"
