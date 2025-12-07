@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1.7
+ARG PACKAGE_VERSION=0.1.0
 
 # ---------- toolchain: dotnet + protoc + zig ----------
 FROM mcr.microsoft.com/dotnet/sdk:8.0-noble AS toolchain
@@ -69,6 +70,8 @@ RUN chmod +x ./scripts/build_target.sh \
 
 # ---------- pack ----------
 FROM toolchain AS pack
+ARG PACKAGE_VERSION
+ENV PACKAGE_VERSION=${PACKAGE_VERSION}
 # project sources last, so native builds cache even if C# changes
 COPY src/PostgresQuery /work/src/PostgresQuery
 COPY LICENSES /work/LICENSES
