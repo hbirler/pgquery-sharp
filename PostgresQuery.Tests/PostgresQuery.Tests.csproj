@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <PostgresQueryPackageVersion Condition="'$(PostgresQueryPackageVersion)' == ''">0.1.3</PostgresQueryPackageVersion>
+    <PostgresQueryPackageVersion Condition="'$(PostgresQueryPackageVersion)' == ''">$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)..\VERSION').Trim())</PostgresQueryPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

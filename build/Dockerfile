@@ -115,6 +115,7 @@ ENV PACKAGE_VERSION=${PACKAGE_VERSION}
 # docs + license for packaging metadata
 COPY README.md /work/README.md
 COPY LICENSE /work/LICENSE
+COPY VERSION /work/VERSION
 # project sources last, so native builds cache even if C# changes
 COPY src/PostgresQuery /work/src/PostgresQuery
 # generated files
