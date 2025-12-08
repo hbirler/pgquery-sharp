@@ -31,7 +31,6 @@ The repository ships with a Docker-based build that produces the NuGet package a
 
 ```bash
 ./run.sh            # builds into ./out and runs PostgresQuery.Tests
-PACKAGE_VERSION=0.1.0 ./run.sh   # override package version
 ```
 
 Generated protobuf bindings and NuGet package are produced inside the Docker build and emitted under `out/`.
